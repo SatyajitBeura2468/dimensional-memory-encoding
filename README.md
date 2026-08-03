@@ -1,2 +1,69 @@
-# dimensional-memory-encoding
-An immersive, interactive visual explainer of Dimensional Memory Encoding (DME), showing how spatial pressure geometry can temporarily retain and reveal the order of past forces in a Brownian soft-particle system.
+# The Box That Remembers
+
+An immersive public-facing explanation of **Dimensional Memory Encoding (DME)** — a computational soft-matter study by Satyajit Beura.
+
+> A memory is a past that can still be read.
+
+The site guides visitors through two matched compression histories, shows why bulk observables do not reliably reveal their order, reveals a local interaction-pressure fingerprint, attacks that explanation with spatial shuffling, and explores the fading trace with a later weak probe.
+
+## Scientific scope
+
+This website is about DME only. It does not make claims about quantum memory, extra dimensions, consciousness, all matter, or a new physical force.
+
+The core interpretation is deliberately narrow: local interaction-pressure geometry can act as a transient, distributed, mechanically readable carrier of temporal-order information in a driven Brownian soft-particle system.
+
+**Important:** This website is a public-facing interactive explanation of the DME Version 3 computational paper. Browser simulations are educational reconstructions unless explicitly identified as archived research outputs.
+
+## Routes
+
+- `/` — guided scrollytelling experiment
+- `/lab` — interactive browser reconstruction with layer and weak-probe controls
+- `/evidence` — exact locked Version 3 results, controls, and limitations
+- `/paper` — paper identity, abstract, method map, glossary, and citation
+
+## Key result
+
+At the first recorded moment after drive removal, interaction-pressure maps achieved **90.8% balanced accuracy** (95% interval 87.3%–94.2%) when distinguishing matched histories with opposite temporal order. Spatially shuffling the map locations reduced the mean result to chance.
+
+## Local development
+
+```bash
+npm install
+npm run dev
+```
+
+## Validation
+
+```bash
+npm run format:check
+npm run lint
+npm run test
+npm run build
+```
+
+## Accessibility
+
+The interface uses semantic landmarks, keyboard-operable controls, visible focus states, responsive layouts, text equivalents for the main visual claims, accessible evidence-table fallback, and reduced-motion support.
+
+## Project structure
+
+```
+src/
+  components/  visual and navigation primitives
+  data/        locked paper facts and claim classes
+  pages/       Story, Lab, Evidence, and Paper routes
+```
+
+## Deployment
+
+Vercel is configured for a Vite single-page application with route rewrites. Add the final production URL here after deployment.
+
+## Limitations
+
+Scalar local pressure did not successfully predict the complete noisy future local-flow field. Pressure is a useful history-bearing coordinate, not a complete description of future motion.
+
+## Author and licence
+
+Satyajit Beura · Independent Student Researcher · Bhawanipatna, Odisha, India.
+
+Released under the MIT licence. Contributions should preserve the locked paper-facts source and clearly distinguish reconstructions from archived research data.

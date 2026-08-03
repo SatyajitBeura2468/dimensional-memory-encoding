@@ -8,14 +8,16 @@ import { facts } from "../data/dmePaperFacts";
 export function HomePage() {
   const [history, setHistory] = useState<"LR" | "RL">("LR"),
     [shuffled, setShuffled] = useState(false),
-    [delay, setDelay] = useState(0);
+    [delay, setDelay] = useState(0),
+    [memoryAnswer, setMemoryAnswer] = useState<"yes" | "no" | null>(null),
+    [bulkReveal, setBulkReveal] = useState(false),
+    [probeHistory, setProbeHistory] = useState<"LR" | "RL">("LR");
   const selected = history === "LR" ? "Left → Right" : "Right → Left";
   const accuracy = (facts.results.pressureDecay[delay] * 100).toFixed(1);
   return (
     <div className="story">
       <section className="hero">
         <div className="hero-copy">
-          <p className="micro">Dimensional Memory Encoding</p>
           <h1>
             This box has no brain.
             <br />
@@ -46,6 +48,22 @@ export function HomePage() {
           <span>Delayed response</span>
           <ArrowRight />
           <strong>Recoverable record</strong>
+        </div>
+        <div className="memory-question">
+          <p>Is a delayed response enough to prove memory?</p>
+          <div role="group" aria-label="Answer whether delay proves memory">
+            <button onClick={() => setMemoryAnswer("yes")}>Yes</button>
+            <button onClick={() => setMemoryAnswer("no")}>
+              Not necessarily
+            </button>
+          </div>
+          {memoryAnswer && (
+            <output aria-live="polite">
+              <strong>Not yet.</strong> Delay is not the same as a recoverable
+              record. We need a later measurement that distinguishes specific
+              histories.
+            </output>
+          )}
         </div>
       </section>
       <section className="chapter system">
@@ -145,9 +163,58 @@ export function HomePage() {
           </aside>
         </div>
       </section>
+      <section className="chapter bulk-test">
+        <div>
+          <p className="micro">04 · Global controls</p>
+          <h2>First, check the whole box.</h2>
+          <p>
+            Total potential energy, global pressure, and training work are
+            sensible first checks. But averaging the entire world into a few
+            numbers removes where the interactions happened.
+          </p>
+          <button
+            className="button secondary"
+            onClick={() => setBulkReveal(true)}
+          >
+            {bulkReveal
+              ? "Global result revealed"
+              : "Guess from global measures"}
+          </button>
+        </div>
+        <div
+          className="instrument-bank"
+          aria-label="Global measurement intuition demonstration"
+        >
+          <div>
+            <span>Total potential energy</span>
+            <b>matched</b>
+            <i />
+          </div>
+          <div>
+            <span>Global pressure</span>
+            <b>overlapping</b>
+            <i />
+          </div>
+          <div>
+            <span>Total training work</span>
+            <b>{facts.results.work.toFixed(3)}</b>
+            <i />
+          </div>
+          {bulkReveal && (
+            <output aria-live="polite">
+              <strong>48.3%</strong>
+              <span>published bulk balanced accuracy</span>
+              <small>
+                50% = chance · this interaction is an intuition demonstration,
+                not a new sample.
+              </small>
+            </output>
+          )}
+        </div>
+      </section>
       <section className="chapter local">
         <div>
-          <p className="micro">04 · The decisive measurement</p>
+          <p className="micro">05 · The decisive measurement</p>
           <h2>
             Stop averaging
             <br />
@@ -162,6 +229,17 @@ export function HomePage() {
             “dimensional” means spread across locations in an ordinary spatial
             field — not extra dimensions.
           </p>
+          <div className="comparison-readout">
+            <span>
+              Density <b>86.3%</b>
+            </span>
+            <span>
+              Pressure <b>90.8%</b>
+            </span>
+            <span>
+              Beyond density <b>+0.1198 nats</b>
+            </span>
+          </div>
         </div>
         <div className="field-pair">
           <FieldGrid history={history} density />
@@ -170,7 +248,7 @@ export function HomePage() {
       </section>
       <section className="chapter fingerprint">
         <div className="fingerprint-head">
-          <p className="micro">05 · Spatial fingerprint</p>
+          <p className="micro">06 · Spatial fingerprint</p>
           <h2>The order left a spatial fingerprint.</h2>
           <p>
             The displayed map is an illustrative reconstruction. The published
@@ -200,7 +278,7 @@ export function HomePage() {
       </section>
       <section className="chapter decay">
         <div>
-          <p className="micro">06 · Relaxation</p>
+          <p className="micro">07 · Relaxation</p>
           <h2>Forgetting is part of the evidence.</h2>
           <p>
             The signal fades toward chance after the drive is removed. That
@@ -227,7 +305,7 @@ export function HomePage() {
       <section className="chapter probe">
         <div>
           <Sparkles size={22} />
-          <p className="micro">07 · Weak mechanical probe</p>
+          <p className="micro">08 · Weak mechanical probe</p>
           <h2>The memory changes a later physical response.</h2>
         </div>
         <div>
@@ -236,6 +314,28 @@ export function HomePage() {
             was compressed first. At delay 80, the two histories differ by{" "}
             <b>−0.3936</b> in paired response.
           </p>
+          <div
+            className="probe-actions"
+            role="group"
+            aria-label="Compare weak probe histories"
+          >
+            <button
+              className={probeHistory === "LR" ? "selected" : ""}
+              onClick={() => setProbeHistory("LR")}
+            >
+              Probe Left → Right
+            </button>
+            <button
+              className={probeHistory === "RL" ? "selected" : ""}
+              onClick={() => setProbeHistory("RL")}
+            >
+              Probe Right → Left
+            </button>
+          </div>
+          <output className="probe-response" aria-live="polite">
+            <span>Delay 80 response</span>
+            <strong>{probeHistory === "LR" ? "+0.1763" : "−0.2173"}</strong>
+          </output>
           <div className="probe-rail">
             <span>
               Left → Right <b>+0.1763</b>
@@ -249,6 +349,41 @@ export function HomePage() {
             mechanically readable physical record.
           </p>
         </div>
+      </section>
+      <section className="chapter criteria-story">
+        <p className="micro">09 · What the evidence establishes</p>
+        <h2>Six tests for a readable past.</h2>
+        <ol>
+          <li>
+            <b>Matched input</b>
+            <span>The same two perturbations are used.</span>
+          </li>
+          <li>
+            <b>Order alone changes</b>
+            <span>Left → Right is compared with Right → Left.</span>
+          </li>
+          <li>
+            <b>The drive ends</b>
+            <span>Observation begins after forcing reaches zero.</span>
+          </li>
+          <li>
+            <b>A local record remains</b>
+            <span>Held-out pressure maps decode history.</span>
+          </li>
+          <li>
+            <b>Geometry matters</b>
+            <span>Spatial shuffling collapses the result.</span>
+          </li>
+          <li>
+            <b>The record is physical</b>
+            <span>A weak later probe responds differently.</span>
+          </li>
+        </ol>
+        <aside className="plain-truth">
+          <strong>The particles are not thinking.</strong> The result is a
+          narrow statement about a transient, distributed, mechanically readable
+          physical record.
+        </aside>
       </section>
       <section className="chapter final">
         <Eye />

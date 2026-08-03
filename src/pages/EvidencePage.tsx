@@ -144,6 +144,96 @@ export function EvidencePage() {
           note="Immediate pressure decoding survived tested temperature-amplitude combinations, particle counts, grids, decoders, and timestep checks."
         />
       </section>
+      <section className="evidence-ledger">
+        <div>
+          <p className="micro">Stress tests · direct results</p>
+          <h2>Try to make the signal disappear.</h2>
+          <p>
+            The published checks change the decoder, integration step, system
+            size, grid size, temperature, and pulse amplitude.
+          </p>
+        </div>
+        <dl>
+          <div>
+            <dt>Pressure lower-bound information</dt>
+            <dd>{data.informationBits.toFixed(3)} bits</dd>
+          </div>
+          <div>
+            <dt>Density + pressure</dt>
+            <dd>{(data.combined * 100).toFixed(1)}%</dd>
+          </div>
+          <div>
+            <dt>Temperature–amplitude combinations</dt>
+            <dd>{data.robustness.conditions}</dd>
+          </div>
+          <div>
+            <dt>Immediate decoding range</dt>
+            <dd>
+              {(data.robustness.minimum * 100).toFixed(1)}–
+              {(data.robustness.maximum * 100).toFixed(1)}%
+            </dd>
+          </div>
+          <div>
+            <dt>Grouped decoder assignments</dt>
+            <dd>
+              {data.robustness.assignments} × {data.robustness.folds}-fold
+            </dd>
+          </div>
+          <div>
+            <dt>Particle counts</dt>
+            <dd>{data.robustness.particles.join(" · ")}</dd>
+          </div>
+          <div>
+            <dt>Size-scaled grids</dt>
+            <dd>
+              {data.robustness.grids
+                .map((grid) => `${grid}×${grid}`)
+                .join(" · ")}
+            </dd>
+          </div>
+          <div>
+            <dt>Preparation work</dt>
+            <dd>{data.work.toFixed(3)} reduced units</dd>
+          </div>
+        </dl>
+      </section>
+      <section className="probe-evidence">
+        <div>
+          <p className="micro">Mechanical readout</p>
+          <h2>The later probe reads a fading asymmetry.</h2>
+        </div>
+        <table>
+          <caption>Published weak-probe results by observation delay</caption>
+          <thead>
+            <tr>
+              <th>Delay</th>
+              <th>Left → Right</th>
+              <th>Right → Left</th>
+              <th>Paired difference</th>
+              <th>Balanced accuracy</th>
+              <th>AUC</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td>80</td>
+              <td>+0.1763</td>
+              <td>−0.2173</td>
+              <td>−0.3936</td>
+              <td>75.8%</td>
+              <td>0.855</td>
+            </tr>
+            <tr>
+              <td>200</td>
+              <td>+0.1053</td>
+              <td>−0.1374</td>
+              <td>−0.2427</td>
+              <td>68.3%</td>
+              <td>0.735</td>
+            </tr>
+          </tbody>
+        </table>
+      </section>
       <section className="limitation">
         <span className="classification">limitation</span>
         <h2>Pressure is not a complete crystal ball.</h2>
@@ -151,6 +241,16 @@ export function EvidencePage() {
           Scalar local pressure did not successfully predict the complete noisy
           future local-flow field. It is a useful history-bearing coordinate,
           not a complete description of every aspect of future motion.
+        </p>
+      </section>
+      <section className="predictions">
+        <span className="classification">prediction</span>
+        <h2>What would challenge the interpretation?</h2>
+        <p>
+          If a controlled realization preserved history decoding after its local
+          pressure geometry was genuinely randomized, the spatial-carrier
+          interpretation would need revision. This is a falsifiable prediction,
+          not an achieved experiment.
         </p>
       </section>
     </div>

@@ -6,6 +6,8 @@ An immersive public-facing explanation of **Dimensional Memory Encoding (DME)** 
 
 > A memory is a past that can still be read.
 
+![The Box That Remembers — opening experiment](public/og-preview.png)
+
 The site guides visitors through two matched compression histories, shows why bulk observables do not reliably reveal their order, reveals a local interaction-pressure fingerprint, attacks that explanation with spatial shuffling, and explores the fading trace with a later weak probe.
 
 ## Scientific scope
@@ -22,6 +24,20 @@ The core interpretation is deliberately narrow: local interaction-pressure geome
 - `/lab` — interactive browser reconstruction with layer and weak-probe controls
 - `/evidence` — exact locked Version 3 results, controls, and limitations
 - `/paper` — paper identity, abstract, method map, glossary, and citation
+
+## What visitors can do
+
+- interact with exactly 72 softly moving particles
+- reveal contacts, trails, periodic motion, and slow motion
+- replay both matched pulse orders
+- compare bulk measurements with 6 × 6 density and pressure fields
+- shuffle field locations while preserving every value
+- move through the published decay delays
+- compare the later weak-probe response
+- explore a live browser reconstruction in the laboratory
+- switch exact evidence charts to accessible data tables
+
+The particle reconstruction runs in a Web Worker so the main interface remains responsive. Deterministic seeded states make comparisons repeatable.
 
 ## Key result
 
@@ -41,6 +57,8 @@ npm run format:check
 npm run lint
 npm run test
 npm run build
+npm run test:e2e
+npm audit --omit=dev
 ```
 
 ## Accessibility
@@ -51,9 +69,11 @@ The interface uses semantic landmarks, keyboard-operable controls, visible focus
 
 ```
 src/
-  components/  visual and navigation primitives
-  data/        locked paper facts and claim classes
+  components/  visual, chart, and navigation primitives
+  data/        locked Version 3 facts and claim classes
   pages/       Story, Lab, Evidence, and Paper routes
+  simulation/  worker-based reconstruction and tested physics helpers
+e2e/           desktop and mobile browser journeys
 ```
 
 ## Deployment
@@ -69,3 +89,5 @@ Scalar local pressure did not successfully predict the complete noisy future loc
 Satyajit Beura · Independent Student Researcher · Bhawanipatna, Odisha, India.
 
 Released under the MIT licence. Contributions should preserve the locked paper-facts source and clearly distinguish reconstructions from archived research data.
+
+Before proposing changes, run formatting, lint, unit tests, the production build, and the Playwright journeys. Scientific copy must retain one of the explicit claim classes: `direct-result`, `interpretation`, `prediction`, `analogy`, or `limitation`.

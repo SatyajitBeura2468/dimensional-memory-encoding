@@ -131,6 +131,33 @@ export function PaperPage() {
           reconstructions unless explicitly identified as archived research
           outputs.
         </p>
+        <ul className="repro-list">
+          <li>
+            <span>Locked model and protocol parameters</span>
+            <b>included</b>
+          </li>
+          <li>
+            <span>Exact published result tables</span>
+            <b>included</b>
+          </li>
+          <li>
+            <span>Deterministic browser reconstruction</span>
+            <b>included</b>
+          </li>
+          <li>
+            <span>Archived trajectory maps</span>
+            <b>not yet linked</b>
+          </li>
+          <li>
+            <span>Replication package</span>
+            <b>not yet linked</b>
+          </li>
+        </ul>
+        <p className="muted">
+          The data layer is intentionally separated from the visual components
+          so archived maps and replication files can replace reconstructed
+          examples without redesigning the experience.
+        </p>
       </section>
     </div>
   );

@@ -1,9 +1,14 @@
 import { Menu, X } from "lucide-react";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import type { ReactNode } from "react";
-import { NavLink } from "react-router-dom";
 
-export function SiteShell({ children }: { children: ReactNode }) {
+export function SiteShell({
+  children,
+  path,
+}: {
+  children: ReactNode;
+  path: string;
+}) {
   const [open, setOpen] = useState(false);
   const nav = [
     ["/", "Story"],
@@ -11,18 +16,26 @@ export function SiteShell({ children }: { children: ReactNode }) {
     ["/evidence", "Evidence"],
     ["/paper", "Paper"],
   ] as const;
+  useEffect(() => {
+    const titles: Record<string, string> = {
+      "/": "The Box That Remembers | Dimensional Memory Encoding",
+      "/lab": "Interactive DME Laboratory | The Box That Remembers",
+      "/evidence": "DME Evidence and Controls | The Box That Remembers",
+      "/paper": "DME Version 3 Paper | The Box That Remembers",
+    };
+    document.title = titles[path] ?? titles["/"];
+    window.scrollTo(0, 0);
+    setOpen(false);
+  }, [path]);
   return (
     <>
       <a className="skip" href="#main">
         Skip to content
       </a>
       <header className="site-header">
-        <NavLink to="/" className="brand" onClick={() => setOpen(false)}>
-          <span className="brand-mark" aria-hidden="true">
-            □
-          </span>
+        <a href="/" className="brand" onClick={() => setOpen(false)}>
           The Box That Remembers
-        </NavLink>
+        </a>
         <button
           className="menu-button"
           aria-label="Toggle navigation"
@@ -33,14 +46,14 @@ export function SiteShell({ children }: { children: ReactNode }) {
         </button>
         <nav className={open ? "nav open" : "nav"}>
           {nav.map(([to, label]) => (
-            <NavLink
+            <a
               key={to}
-              to={to}
-              end={to === "/"}
+              href={to}
+              className={path === to ? "active" : undefined}
               onClick={() => setOpen(false)}
             >
               {label}
-            </NavLink>
+            </a>
           ))}
         </nav>
       </header>

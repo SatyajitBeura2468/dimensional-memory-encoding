@@ -1,4 +1,4 @@
-import { ArrowRight, Info, RotateCcw } from "lucide-react";
+import { ArrowRight, Info, RotateCcw, Shuffle } from "lucide-react";
 import { useState } from "react";
 import { FieldGrid } from "../components/FieldGrid";
 import { ParticleBox } from "../components/ParticleBox";
@@ -9,7 +9,10 @@ export function LabPage() {
     [layer, setLayer] = useState<"particles" | "pressure" | "density">(
       "particles",
     ),
-    [probe, setProbe] = useState<"left" | "right" | null>(null);
+    [probe, setProbe] = useState<"left" | "right" | null>(null),
+    [delayIndex, setDelayIndex] = useState(0),
+    [shuffled, setShuffled] = useState(false),
+    [resetKey, setResetKey] = useState(0);
   const response = probe
     ? probe === "left"
       ? history === "LR"
@@ -82,7 +85,17 @@ export function LabPage() {
               <dt>Time step</dt>
               <dd>0.0025</dd>
             </dl>
-            <button className="reset">
+            <button
+              className="reset"
+              onClick={() => {
+                setHistory("LR");
+                setLayer("particles");
+                setProbe(null);
+                setDelayIndex(0);
+                setShuffled(false);
+                setResetKey((value) => value + 1);
+              }}
+            >
               <RotateCcw size={14} /> Reset to paper preset
             </button>
           </div>
@@ -90,10 +103,14 @@ export function LabPage() {
         <div className="lab-main">
           <div className="lab-stage">
             {layer === "particles" ? (
-              <ParticleBox history={history} showControls />
+              <ParticleBox key={resetKey} history={history} showControls />
             ) : (
               <div className="field-stage">
-                <FieldGrid history={history} density={layer === "density"} />
+                <FieldGrid
+                  history={history}
+                  density={layer === "density"}
+                  shuffled={shuffled}
+                />
                 <p>
                   {layer === "pressure"
                     ? "Interaction pressure estimates local contact forces."
@@ -111,6 +128,32 @@ export function LabPage() {
             <span>
               Drive: <b>removed</b>
             </span>
+            <span>
+              Delay: <b>{facts.results.delays[delayIndex]} steps</b>
+            </span>
+          </div>
+          <div className="lab-test-strip">
+            <label htmlFor="lab-delay">Observation delay</label>
+            <input
+              id="lab-delay"
+              type="range"
+              min="0"
+              max="4"
+              step="1"
+              value={delayIndex}
+              onChange={(event) => setDelayIndex(Number(event.target.value))}
+            />
+            <output>
+              {(facts.results.pressureDecay[delayIndex] * 100).toFixed(1)}%
+              published pressure decoding
+            </output>
+            <button
+              onClick={() => setShuffled((value) => !value)}
+              disabled={layer === "particles"}
+            >
+              <Shuffle size={14} />{" "}
+              {shuffled ? "Restore cells" : "Shuffle cells"}
+            </button>
           </div>
           <section className="probe-console">
             <div>

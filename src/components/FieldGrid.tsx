@@ -1,4 +1,5 @@
 import { useMemo } from "react";
+import { shufflePreservingValues } from "../simulation/physics";
 
 const lr = [
   0.08, 0.16, 0.27, 0.46, 0.68, 0.82, 0.12, 0.23, 0.42, 0.65, 0.85, 0.96, 0.09,
@@ -23,9 +24,7 @@ export function FieldGrid({
 }) {
   const values = useMemo(() => {
     const base = history === "LR" ? lr : rl;
-    const arranged = shuffled
-      ? [...base].sort((a, b) => Math.sin(a * 89) - Math.sin(b * 89))
-      : base;
+    const arranged = shuffled ? shufflePreservingValues(base) : base;
     return density
       ? arranged.map((v, i) =>
           Math.max(0.05, Math.min(0.95, v * 0.76 + (i % 2) * 0.12)),

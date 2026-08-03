@@ -2,6 +2,8 @@
 
 An immersive public-facing explanation of **Dimensional Memory Encoding (DME)** — a computational soft-matter study by Satyajit Beura.
 
+**Live site:** [dimensional-memory-encoding.vercel.app](https://dimensional-memory-encoding.vercel.app/)
+
 > A memory is a past that can still be read.
 
 The site guides visitors through two matched compression histories, shows why bulk observables do not reliably reveal their order, reveals a local interaction-pressure fingerprint, attacks that explanation with spatial shuffling, and explores the fading trace with a later weak probe.
@@ -56,7 +58,7 @@ src/
 
 ## Deployment
 
-Vercel is configured for a Vite single-page application with route rewrites. Add the final production URL here after deployment.
+Vercel is configured for a Vite single-page application with route rewrites. Production: [dimensional-memory-encoding.vercel.app](https://dimensional-memory-encoding.vercel.app/)
 
 ## Limitations
 

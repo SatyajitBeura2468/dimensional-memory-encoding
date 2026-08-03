@@ -70,7 +70,7 @@ export const claims: Record<string, { text: string; kind: ClaimClass }> = {
 };
 
 export const siteConfig = {
-  productionUrl: "",
+  productionUrl: "https://dimensional-memory-encoding.vercel.app",
   paperUrl: "",
   replicationUrl: "",
 };

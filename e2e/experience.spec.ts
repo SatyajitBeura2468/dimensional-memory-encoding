@@ -61,3 +61,29 @@ test("mobile layout has no horizontal page overflow", async ({
     page.getByRole("link", { name: "Lab", exact: true }),
   ).toBeVisible();
 });
+
+test("laptop hero keeps the kinetic type and particle instrument in frame", async ({
+  page,
+}, testInfo) => {
+  test.skip(testInfo.project.name !== "desktop", "desktop viewport regression");
+  await page.setViewportSize({ width: 990, height: 620 });
+  await page.goto("/");
+
+  const title = await page.locator(".hero h1").boundingBox();
+  const instrument = await page.locator(".hero-instrument").boundingBox();
+  const scrollCue = await page.locator(".hero-whisper").boundingBox();
+
+  expect(title).not.toBeNull();
+  expect(instrument).not.toBeNull();
+  expect(scrollCue).not.toBeNull();
+  expect(title!.x + title!.width).toBeLessThan(instrument!.x);
+  expect(instrument!.y + instrument!.height).toBeLessThanOrEqual(570);
+  expect(scrollCue!.y + scrollCue!.height).toBeLessThanOrEqual(620);
+  expect(
+    await page.evaluate(
+      () =>
+        document.documentElement.scrollWidth -
+        document.documentElement.clientWidth,
+    ),
+  ).toBeLessThanOrEqual(1);
+});

@@ -1,5 +1,5 @@
 import { ArrowDown, ArrowRight, Eye, Shuffle, Sparkles } from "lucide-react";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { DecayChart } from "../components/DecayChart";
 import { FieldGrid } from "../components/FieldGrid";
 import { ParticleBox } from "../components/ParticleBox";
@@ -12,29 +12,107 @@ export function HomePage() {
     [memoryAnswer, setMemoryAnswer] = useState<"yes" | "no" | null>(null),
     [bulkReveal, setBulkReveal] = useState(false),
     [probeHistory, setProbeHistory] = useState<"LR" | "RL">("LR");
+
+  useEffect(() => {
+    const chapters = Array.from(
+      document.querySelectorAll<HTMLElement>(".chapter"),
+    );
+    if (!("IntersectionObserver" in window)) {
+      chapters.forEach((chapter) => chapter.classList.add("is-visible"));
+      return;
+    }
+    const observer = new IntersectionObserver(
+      (entries) => {
+        entries.forEach((entry) => {
+          if (entry.isIntersecting) {
+            entry.target.classList.add("is-visible");
+            observer.unobserve(entry.target);
+          }
+        });
+      },
+      { rootMargin: "0px 0px -12%", threshold: 0.08 },
+    );
+    chapters.forEach((chapter) => observer.observe(chapter));
+    return () => observer.disconnect();
+  }, []);
+
+  const moveHeroStage = (event: React.PointerEvent<HTMLDivElement>) => {
+    const rect = event.currentTarget.getBoundingClientRect();
+    event.currentTarget.style.setProperty(
+      "--pointer-x",
+      `${((event.clientX - rect.left) / rect.width - 0.5) * 2}`,
+    );
+    event.currentTarget.style.setProperty(
+      "--pointer-y",
+      `${((event.clientY - rect.top) / rect.height - 0.5) * 2}`,
+    );
+  };
   const selected = history === "LR" ? "Left → Right" : "Right → Left";
   const accuracy = (facts.results.pressureDecay[delay] * 100).toFixed(1);
   return (
     <div className="story">
       <section className="hero">
+        <div className="hero-progress" aria-hidden="true">
+          <span className="active">01</span>
+          <span>02</span>
+          <span>03</span>
+        </div>
+        <div className="protocol-switch" aria-hidden="true">
+          <span className="protocol-label">Protocol</span>
+          <span className="protocol-option cyan-text">Left → Right</span>
+          <i>versus</i>
+          <span className="protocol-option amber-text">Right → Left</span>
+        </div>
         <div className="hero-copy">
           <h1>
-            This box has no brain.
-            <br />
-            <em>Can it still remember?</em>
+            <span className="title-line title-line-one">This box</span>
+            <span className="title-line title-line-two">has no brain.</span>
+            <span className="title-line title-line-three">Can it still</span>
+            <em className="title-line title-line-four">remember?</em>
           </h1>
           <p className="lede">
-            A small physical world is given the same two pushes. Only their
-            order changes.
+            A small physical world is given the same two pushes. Only their{" "}
+            <em>order</em> changes.
           </p>
-          <a className="button primary" href="#experiment">
-            Begin the experiment <ArrowDown size={17} />
-          </a>
+          <div className="hero-action-row">
+            <a className="button primary hero-cta" href="#experiment">
+              <span>Begin the experiment</span> <ArrowDown size={18} />
+            </a>
+            <span className="key-hint" aria-hidden="true">
+              Enter · Space · Click
+            </span>
+          </div>
         </div>
-        <ParticleBox className="hero-box" />
-        <p className="hero-whisper">
-          A memory is a past that can still be read.
-        </p>
+        <div
+          className="hero-instrument"
+          onPointerMove={moveHeroStage}
+          onPointerLeave={(event) => {
+            event.currentTarget.style.setProperty("--pointer-x", "0");
+            event.currentTarget.style.setProperty("--pointer-y", "0");
+          }}
+        >
+          <span className="axis axis-y" aria-hidden="true">
+            Y
+          </span>
+          <span className="axis axis-x" aria-hidden="true">
+            X
+          </span>
+          <div className="corner corner-nw" aria-hidden="true" />
+          <div className="corner corner-ne" aria-hidden="true" />
+          <div className="corner corner-sw" aria-hidden="true" />
+          <div className="corner corner-se" aria-hidden="true" />
+          <ParticleBox className="hero-box" />
+          <p className="instrument-note" aria-hidden="true">
+            <span>Pointer disturbance</span>
+            <b>Feel the world push back</b>
+          </p>
+        </div>
+        <a className="hero-whisper" href="#experiment">
+          <span>A memory is a past that can still be read.</span>
+          <i aria-hidden="true">
+            <ArrowDown size={15} />
+          </i>
+        </a>
       </section>
       <section className="chapter intro" id="experiment">
         <p className="micro">01 · What counts as memory?</p>

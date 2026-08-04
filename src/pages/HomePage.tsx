@@ -1,5 +1,5 @@
 import { ArrowDown, ArrowRight, Eye, Shuffle, Sparkles } from "lucide-react";
-import { useEffect, useState } from "react";
+import { useState } from "react";
 import { DecayChart } from "../components/DecayChart";
 import { FieldGrid } from "../components/FieldGrid";
 import { ParticleBox } from "../components/ParticleBox";
@@ -12,29 +12,6 @@ export function HomePage() {
     [memoryAnswer, setMemoryAnswer] = useState<"yes" | "no" | null>(null),
     [bulkReveal, setBulkReveal] = useState(false),
     [probeHistory, setProbeHistory] = useState<"LR" | "RL">("LR");
-
-  useEffect(() => {
-    const chapters = Array.from(
-      document.querySelectorAll<HTMLElement>(".chapter"),
-    );
-    if (!("IntersectionObserver" in window)) {
-      chapters.forEach((chapter) => chapter.classList.add("is-visible"));
-      return;
-    }
-    const observer = new IntersectionObserver(
-      (entries) => {
-        entries.forEach((entry) => {
-          if (entry.isIntersecting) {
-            entry.target.classList.add("is-visible");
-            observer.unobserve(entry.target);
-          }
-        });
-      },
-      { rootMargin: "0px 0px -12%", threshold: 0.08 },
-    );
-    chapters.forEach((chapter) => observer.observe(chapter));
-    return () => observer.disconnect();
-  }, []);
 
   const moveHeroStage = (event: React.PointerEvent<HTMLDivElement>) => {
     const rect = event.currentTarget.getBoundingClientRect();
@@ -56,12 +33,6 @@ export function HomePage() {
           <span className="active">01</span>
           <span>02</span>
           <span>03</span>
-        </div>
-        <div className="protocol-switch" aria-hidden="true">
-          <span className="protocol-label">Protocol</span>
-          <span className="protocol-option cyan-text">Left → Right</span>
-          <i>versus</i>
-          <span className="protocol-option amber-text">Right → Left</span>
         </div>
         <div className="hero-copy">
           <h1>
@@ -91,6 +62,12 @@ export function HomePage() {
             event.currentTarget.style.setProperty("--pointer-y", "0");
           }}
         >
+          <div className="protocol-switch" aria-hidden="true">
+            <span className="protocol-label">Order protocol</span>
+            <span className="protocol-option cyan-text">Left → Right</span>
+            <i>versus</i>
+            <span className="protocol-option amber-text">Right → Left</span>
+          </div>
           <span className="axis axis-y" aria-hidden="true">
             Y
           </span>
@@ -101,7 +78,7 @@ export function HomePage() {
           <div className="corner corner-ne" aria-hidden="true" />
           <div className="corner corner-sw" aria-hidden="true" />
           <div className="corner corner-se" aria-hidden="true" />
-          <ParticleBox className="hero-box" />
+          <ParticleBox className="hero-box" cursorTrail />
           <p className="instrument-note" aria-hidden="true">
             <span>Pointer disturbance</span>
             <b>Feel the world push back</b>

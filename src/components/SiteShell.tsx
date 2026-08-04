@@ -27,11 +27,86 @@ export function SiteShell({
     window.scrollTo(0, 0);
     setOpen(false);
   }, [path]);
+
+  useEffect(() => {
+    const root = document.documentElement;
+    let frame = 0;
+    const updateProgress = () => {
+      frame = 0;
+      const available = root.scrollHeight - window.innerHeight;
+      const progress = available > 0 ? window.scrollY / available : 0;
+      root.style.setProperty("--scroll-progress", String(progress));
+      root.style.setProperty(
+        "--scroll-shift",
+        `${Math.min(window.scrollY, 900)}px`,
+      );
+    };
+    const onScroll = () => {
+      if (!frame) frame = requestAnimationFrame(updateProgress);
+    };
+    updateProgress();
+    window.addEventListener("scroll", onScroll, { passive: true });
+    window.addEventListener("resize", onScroll);
+
+    const selectors = [
+      ".chapter",
+      ".route-hero",
+      ".lab-shell",
+      ".criteria",
+      ".central-result",
+      ".evidence-grid",
+      ".evidence-chart",
+      ".evidence-ledger",
+      ".probe-evidence",
+      ".predictions",
+      ".limitation",
+      ".paper-masthead",
+      ".abstract",
+      ".paper-columns",
+      ".paper-actions",
+      ".repro",
+    ];
+    const blocks = Array.from(
+      document.querySelectorAll<HTMLElement>(selectors.join(",")),
+    );
+    blocks.forEach((block) => block.classList.add("motion-block"));
+
+    if (!("IntersectionObserver" in window)) {
+      blocks.forEach((block) => block.classList.add("motion-in", "is-visible"));
+      return () => {
+        window.removeEventListener("scroll", onScroll);
+        window.removeEventListener("resize", onScroll);
+        if (frame) cancelAnimationFrame(frame);
+      };
+    }
+
+    const observer = new IntersectionObserver(
+      (entries) => {
+        entries.forEach((entry) => {
+          if (!entry.isIntersecting) return;
+          entry.target.classList.add("motion-in", "is-visible");
+          observer.unobserve(entry.target);
+        });
+      },
+      { rootMargin: "0px 0px -11%", threshold: 0.06 },
+    );
+    blocks.forEach((block) => observer.observe(block));
+
+    return () => {
+      observer.disconnect();
+      window.removeEventListener("scroll", onScroll);
+      window.removeEventListener("resize", onScroll);
+      if (frame) cancelAnimationFrame(frame);
+    };
+  }, [path]);
   return (
     <>
       <a className="skip" href="#main">
         Skip to content
       </a>
+      <div className="scroll-progress" aria-hidden="true">
+        <span />
+      </div>
       <header className="site-header">
         <a href="/" className="brand" onClick={() => setOpen(false)}>
           The Box That Remembers

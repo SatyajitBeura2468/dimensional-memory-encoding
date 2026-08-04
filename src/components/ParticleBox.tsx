@@ -6,19 +6,24 @@ type Props = {
   showControls?: boolean;
   className?: string;
   phase?: "rest" | "left" | "right" | "released";
+  cursorTrail?: boolean;
 };
 type Dot = { x: number; y: number; vx: number; vy: number };
+type PointerTrace = { x: number; y: number; alpha: number };
 
 export function ParticleBox({
   history = "LR",
   showControls = false,
   className = "",
   phase = "released",
+  cursorTrail = false,
 }: Props) {
   const canvas = useRef<HTMLCanvasElement>(null);
   const worker = useRef<Worker | null>(null);
   const particles = useRef<Dot[]>([]);
   const trails = useRef<{ x: number; y: number; a: number }[]>([]);
+  const pointerTrace = useRef<PointerTrace[]>([]);
+  const pointerActive = useRef(false);
   const [playing, setPlaying] = useState(true);
   const [contacts, setContacts] = useState(false);
   const [showTrails, setShowTrails] = useState(false);
@@ -104,6 +109,53 @@ export function ParticleBox({
       ctx.fillRect(0, 0, w, h);
 
       const dots = particles.current;
+      if (cursorTrail && pointerTrace.current.length > 0) {
+        const trace = pointerTrace.current;
+        if (trace.length > 1) {
+          ctx.beginPath();
+          trace.forEach((point, index) => {
+            const px = point.x * w;
+            const py = point.y * h;
+            if (index === 0) ctx.moveTo(px, py);
+            else ctx.lineTo(px, py);
+          });
+          const newest = trace[trace.length - 1];
+          ctx.strokeStyle = `rgba(98,220,231,${newest.alpha * 0.34})`;
+          ctx.lineWidth = 1.2;
+          ctx.lineCap = "round";
+          ctx.lineJoin = "round";
+          ctx.stroke();
+        }
+
+        trace.forEach((point, index) => {
+          const age = index / Math.max(1, trace.length - 1);
+          ctx.beginPath();
+          ctx.fillStyle = `rgba(98,220,231,${point.alpha * (0.05 + age * 0.2)})`;
+          ctx.arc(point.x * w, point.y * h, 1.1 + age * 1.3, 0, Math.PI * 2);
+          ctx.fill();
+          point.alpha *= pointerActive.current ? 0.955 : 0.91;
+        });
+        pointerTrace.current = trace.filter((point) => point.alpha > 0.035);
+
+        if (pointerActive.current) {
+          const point = trace[trace.length - 1];
+          ctx.beginPath();
+          ctx.strokeStyle = "rgba(98,220,231,0.42)";
+          ctx.lineWidth = 0.8;
+          ctx.arc(
+            point.x * w,
+            point.y * h,
+            Math.max(9, w * 0.025),
+            0,
+            Math.PI * 2,
+          );
+          ctx.stroke();
+          ctx.beginPath();
+          ctx.fillStyle = "rgba(98,220,231,0.8)";
+          ctx.arc(point.x * w, point.y * h, 1.8, 0, Math.PI * 2);
+          ctx.fill();
+        }
+      }
       if (showTrails && playing) {
         dots.forEach((dot, index) => {
           if (index % 5 === 0)
@@ -155,17 +207,27 @@ export function ParticleBox({
     };
     draw();
     return () => cancelAnimationFrame(raf);
-  }, [contacts, history, phase, playing, showTrails]);
+  }, [contacts, cursorTrail, history, phase, playing, showTrails]);
 
   const pointer = (
     event: React.PointerEvent<HTMLCanvasElement>,
     active: boolean,
   ) => {
     const rect = event.currentTarget.getBoundingClientRect();
+    const x = (event.clientX - rect.left) / rect.width;
+    const y = (event.clientY - rect.top) / rect.height;
+    pointerActive.current = active;
+    if (cursorTrail && active) {
+      const last = pointerTrace.current.at(-1);
+      if (!last || Math.hypot(last.x - x, last.y - y) > 0.005) {
+        pointerTrace.current.push({ x, y, alpha: 1 });
+        pointerTrace.current = pointerTrace.current.slice(-24);
+      }
+    }
     worker.current?.postMessage({
       type: "pointer",
-      x: (event.clientX - rect.left) / rect.width,
-      y: (event.clientY - rect.top) / rect.height,
+      x,
+      y,
       active,
     });
   };
@@ -183,6 +245,8 @@ export function ParticleBox({
       <canvas
         ref={canvas}
         onPointerMove={(event) => pointer(event, true)}
+        onPointerDown={(event) => pointer(event, true)}
+        onPointerUp={(event) => pointer(event, false)}
         onPointerLeave={(event) => pointer(event, false)}
         aria-label={`Interactive reconstruction with exactly 72 particles: ${history === "LR" ? "Left then Right" : "Right then Left"} history`}
       />

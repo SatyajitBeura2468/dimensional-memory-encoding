@@ -71,12 +71,18 @@ test("laptop hero keeps the kinetic type and particle instrument in frame", asyn
 
   const title = await page.locator(".hero h1").boundingBox();
   const instrument = await page.locator(".hero-instrument").boundingBox();
+  const protocol = await page.locator(".protocol-switch").boundingBox();
   const scrollCue = await page.locator(".hero-whisper").boundingBox();
 
   expect(title).not.toBeNull();
   expect(instrument).not.toBeNull();
+  expect(protocol).not.toBeNull();
   expect(scrollCue).not.toBeNull();
   expect(title!.x + title!.width).toBeLessThan(instrument!.x);
+  expect(protocol!.x).toBeGreaterThanOrEqual(instrument!.x);
+  expect(protocol!.x + protocol!.width).toBeLessThanOrEqual(
+    instrument!.x + instrument!.width,
+  );
   expect(instrument!.y + instrument!.height).toBeLessThanOrEqual(570);
   expect(scrollCue!.y + scrollCue!.height).toBeLessThanOrEqual(620);
   expect(
@@ -86,4 +92,21 @@ test("laptop hero keeps the kinetic type and particle instrument in frame", asyn
         document.documentElement.clientWidth,
     ),
   ).toBeLessThanOrEqual(1);
+  expect(
+    await page.locator(".title-line-four").evaluate((element) => {
+      const style = getComputedStyle(element);
+      return style.overflow === "visible" && style.clipPath.includes("-18%");
+    }),
+  ).toBe(true);
+});
+
+test("every route receives the shared motion system", async ({ page }) => {
+  for (const route of ["/", "/lab", "/evidence", "/paper"]) {
+    await page.goto(route);
+    const blocks = page.locator(".motion-block");
+    expect(await blocks.count()).toBeGreaterThan(0);
+    const firstBlock = blocks.first();
+    await firstBlock.scrollIntoViewIfNeeded();
+    await expect(firstBlock).toHaveClass(/motion-in/);
+  }
 });

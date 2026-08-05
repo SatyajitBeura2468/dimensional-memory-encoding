@@ -13,7 +13,7 @@ const ogImage = `${origin}/og-preview.png`;
 
 function htmlFor(path, values) {
   const canonical = `${origin}${path === "/" ? "/" : path}`;
-  const jsonLd = {
+  const baseJsonLd = {
     "@context": "https://schema.org",
     "@type": path === "/paper" ? "ScholarlyArticle" : "WebSite",
     name: values.title,
@@ -34,6 +34,45 @@ function htmlFor(path, values) {
       "https://github.com/SatyajitBeura2468/dimensional-memory-encoding",
     sameAs: ["https://doi.org/10.5281/zenodo.17943112"],
   };
+  const jsonLd =
+    path === "/paper"
+      ? {
+          "@context": "https://schema.org",
+          "@graph": [
+            {
+              ...baseJsonLd,
+              "@id": `${canonical}#article`,
+              citation: "https://doi.org/10.5281/zenodo.17943112",
+              isBasedOn: { "@id": `${origin}/#software` },
+              subjectOf: { "@id": `${canonical}#creative-work` },
+            },
+            {
+              "@type": "Person",
+              "@id": `${origin}/#author`,
+              name: "Satyajit Beura",
+              url: "https://orcid.org/0009-0006-4471-2845",
+              identifier: "https://orcid.org/0009-0006-4471-2845",
+            },
+            {
+              "@type": "CreativeWork",
+              "@id": `${canonical}#creative-work`,
+              name: values.title,
+              url: canonical,
+              license: "https://opensource.org/license/mit",
+            },
+            {
+              "@type": "SoftwareSourceCode",
+              "@id": `${origin}/#software`,
+              name: "Dimensional Memory Encoding Version 3 source",
+              codeRepository:
+                "https://github.com/SatyajitBeura2468/dimensional-memory-encoding",
+              url: "https://github.com/SatyajitBeura2468/dimensional-memory-encoding",
+              license: "https://opensource.org/license/mit",
+              version: "3.0.0",
+            },
+          ],
+        }
+      : baseJsonLd;
   const tags = `
     <title>${values.title}</title>
     <meta name="description" content="${values.description}" />

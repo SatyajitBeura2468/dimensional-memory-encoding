@@ -1,5 +1,7 @@
 # The Box That Remembers
 
+[![Live site](https://img.shields.io/badge/live-site-0b0f14?logo=vercel&logoColor=white)](https://dimensional-memory-encoding.vercel.app/) [![CI](https://github.com/SatyajitBeura2468/dimensional-memory-encoding/actions/workflows/ci.yml/badge.svg)](https://github.com/SatyajitBeura2468/dimensional-memory-encoding/actions/workflows/ci.yml) [![Release](https://img.shields.io/github/v/release/SatyajitBeura2468/dimensional-memory-encoding?label=release)](https://github.com/SatyajitBeura2468/dimensional-memory-encoding/releases/tag/v3.0.0) [![License](https://img.shields.io/badge/license-MIT-57dde7)](https://opensource.org/license/mit) [![Zenodo exploratory preprint](https://img.shields.io/badge/Zenodo-exploratory%20preprint-blue?logo=zenodo)](https://doi.org/10.5281/zenodo.17943112)
+
 An immersive public-facing explanation of **Dimensional Memory Encoding (DME)** — a computational soft-matter study by Satyajit Beura.
 
 **Live site:** [dimensional-memory-encoding.vercel.app](https://dimensional-memory-encoding.vercel.app/)
@@ -39,6 +41,8 @@ The core interpretation is deliberately narrow: local interaction-pressure geome
 
 The particle reconstruction runs in a Web Worker so the main interface remains responsive. Deterministic seeded states make comparisons repeatable.
 
+The `/paper` route is the publication landing page with the operational question, model table, accessible equations, locked results, provenance ledger, and APA/IEEE/Chicago/BibTeX/RIS/plain-text citations. `/history` documents the neutral supersession boundary from the exploratory preprint to Version 3.
+
 ## Key result
 
 At the first recorded moment after drive removal, interaction-pressure maps achieved **90.8% balanced accuracy** (95% interval 87.3%–94.2%) when distinguishing matched histories with opposite temporal order. Spatially shuffling the map locations reduced the mean result to chance.
@@ -58,6 +62,7 @@ npm run lint
 npm run test
 npm run build
 npm run test:e2e
+npm run check:links
 npm audit --omit=dev
 ```
 

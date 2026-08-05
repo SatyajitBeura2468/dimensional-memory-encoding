@@ -101,7 +101,7 @@ test("laptop hero keeps the kinetic type and particle instrument in frame", asyn
 });
 
 test("every route receives the shared motion system", async ({ page }) => {
-  for (const route of ["/", "/lab", "/evidence", "/paper"]) {
+  for (const route of ["/", "/lab", "/evidence", "/paper", "/history"]) {
     await page.goto(route);
     const blocks = page.locator(".motion-block");
     expect(await blocks.count()).toBeGreaterThan(0);
@@ -109,4 +109,28 @@ test("every route receives the shared motion system", async ({ page }) => {
     await firstBlock.scrollIntoViewIfNeeded();
     await expect(firstBlock).toHaveClass(/motion-in/);
   }
+});
+
+test("paper resources and unknown routes are explicit", async ({ page }) => {
+  await page.goto("/paper");
+  await expect(page.getByText(/Download exploratory PDF/i)).toBeVisible();
+  await expect(page.getByText(/View Version 3 release/i)).toBeVisible();
+  await expect(
+    page.locator('a[href="https://doi.org/10.5281/zenodo.17943112"]'),
+  ).toHaveCount(1);
+  expect(await page.title()).toContain("DME Version 3 Paper");
+  expect(await page.locator('link[rel="canonical"]').getAttribute("href")).toBe(
+    "https://dimensional-memory-encoding.vercel.app/paper",
+  );
+
+  await page.goto("/not-a-real-route");
+  await expect(
+    page.getByRole("heading", { name: /page not found/i }),
+  ).toBeVisible();
+  await expect(
+    page.getByLabel("Research surfaces").getByRole("link", { name: "Paper" }),
+  ).toBeVisible();
+  expect(
+    await page.locator('meta[name="robots"]').getAttribute("content"),
+  ).toBe("noindex,nofollow");
 });

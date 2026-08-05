@@ -197,6 +197,91 @@ export function EvidencePage() {
           </div>
         </dl>
       </section>
+      <section className="energy-panel evidence-energy">
+        <div>
+          <p className="micro">Energetic cost of encoding</p>
+          <h2>Preparation cost, stated cautiously.</h2>
+          <p>
+            Mean preparation work is {data.work.toFixed(3)} reduced energy
+            units; β⟨W⟩ = {data.betaWork.toFixed(1)}; the decoder-associated
+            lower bound is {data.informationBits.toFixed(3)} bits.
+          </p>
+        </div>
+        <div className="energy-readout">
+          <strong>{data.work.toFixed(3)}</strong>
+          <span>W · reduced energy units</span>
+          <small>
+            This work-per-decodable-bit comparison is descriptive for this
+            protocol. It is not Landauer efficiency: no logical bit reset or
+            logically irreversible erasure operation was defined.
+          </small>
+        </div>
+      </section>
+      <section className="robustness-panel paper-section">
+        <p className="micro">Source provenance · robustness</p>
+        <h2>Stress tests stay visible without inventing a hidden table.</h2>
+        <p>
+          These values are archived Version 3 result facts. The browser maps are
+          interactive reconstructions, not archived outputs. The locked source
+          records nine temperature–amplitude conditions, six decoders,{" "}
+          {data.robustness.assignments} repeated grouped-fold assignments,{" "}
+          {data.robustness.folds}-fold grouping, particle checks at{" "}
+          {data.robustness.particles.join(" / ")}, and grids{" "}
+          {data.robustness.grids.map((grid) => `${grid}×${grid}`).join(" / ")}.
+        </p>
+        <details open>
+          <summary>Null-test and interval language</summary>
+          <p>
+            Permutation and label-swap tests ask how often a result this strong
+            appears after labels or spatial locations are randomized. The locked
+            spatial-shuffle result is p = {data.shuffle.pValue.toFixed(3)}; the
+            pressure interval is 87.3%–94.2%. The source does not provide a
+            separate delay-700 spatial-null p-value, so no extra significance
+            claim is made there.
+          </p>
+        </details>
+        <details>
+          <summary>Downloadable data</summary>
+          <p>
+            No official CSV attachment was verified on the Zenodo record. Use
+            the record or the GitHub release as the authoritative resource
+            locations; reconstructed browser tables are labelled as such.
+          </p>
+        </details>
+      </section>
+      <section className="provenance-panel paper-section">
+        <p className="micro">Result provenance ledger</p>
+        <dl>
+          <div>
+            <dt>Exact values</dt>
+            <dd>
+              Archived Version 3 locked result source in{" "}
+              <code>src/data/dmePaperFacts.ts</code>.
+            </dd>
+          </div>
+          <div>
+            <dt>Zenodo history</dt>
+            <dd>
+              Earlier exploratory preprint:{" "}
+              <a
+                href="https://zenodo.org/records/17943112"
+                target="_blank"
+                rel="noreferrer"
+              >
+                record 17943112
+              </a>
+              ; its single attached PDF is not the Version 3 source.
+            </dd>
+          </div>
+          <div>
+            <dt>Displayed maps</dt>
+            <dd>
+              Interactive reconstruction generated in-browser from deterministic
+              seeded states.
+            </dd>
+          </div>
+        </dl>
+      </section>
       <section className="probe-evidence">
         <div>
           <p className="micro">Mechanical readout</p>

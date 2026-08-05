@@ -1,0 +1,32 @@
+{
+  "/": {
+    "title": "The Box That Remembers | Dimensional Memory Encoding",
+    "description": "An immersive scientific explainer for Dimensional Memory Encoding: how local interaction-pressure geometry can carry a fading record of temporal order.",
+    "robots": "index,follow"
+  },
+  "/lab": {
+    "title": "Interactive DME Laboratory | The Box That Remembers",
+    "description": "Explore an explicitly labelled browser reconstruction of the Dimensional Memory Encoding particle system, its fields, controls, and weak probe.",
+    "robots": "index,follow"
+  },
+  "/evidence": {
+    "title": "DME Evidence and Controls | The Box That Remembers",
+    "description": "Inspect locked Version 3 result values, null tests, decay, robustness checks, and the boundaries of the Dimensional Memory Encoding interpretation.",
+    "robots": "index,follow"
+  },
+  "/paper": {
+    "title": "Dimensional Memory Encoding, Version 3 | Research Landing Page",
+    "description": "Publication-grade research landing page for Dimensional Memory Encoding Version 3, with methods, equations, results, provenance, citations, and reproducibility links.",
+    "robots": "index,follow"
+  },
+  "/history": {
+    "title": "DME Version History | The Box That Remembers",
+    "description": "A neutral publication history for Dimensional Memory Encoding, from exploratory work to the Version 3 operational framework.",
+    "robots": "index,follow"
+  },
+  "/404": {
+    "title": "Page Not Found | The Box That Remembers",
+    "description": "The requested Dimensional Memory Encoding page was not found.",
+    "robots": "noindex,nofollow"
+  }
+}

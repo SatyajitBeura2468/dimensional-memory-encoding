@@ -1,0 +1,28 @@
+cff-version: 1.2.0
+message: "If you use the Version 3 website or code, cite this repository and identify the exploratory Zenodo DOI separately."
+title: "Dimensional Memory Encoding"
+version: "3.0.0"
+date-released: 2026-08-05
+authors:
+  - family-names: Beura
+    given-names: Satyajit
+    orcid: "https://orcid.org/0009-0006-4471-2845"
+doi: "10.5281/zenodo.17943112"
+repository-code: "https://github.com/SatyajitBeura2468/dimensional-memory-encoding"
+url: "https://dimensional-memory-encoding.vercel.app"
+license: MIT
+keywords:
+  - soft-matter
+  - nonequilibrium-physics
+  - brownian-dynamics
+  - reproducible-research
+preferred-citation:
+  type: software
+  title: "Dimensional Memory Encoding"
+  version: "3.0.0"
+  authors:
+    - family-names: Beura
+      given-names: Satyajit
+      orcid: "https://orcid.org/0009-0006-4471-2845"
+  year: 2026
+  url: "https://dimensional-memory-encoding.vercel.app/paper"

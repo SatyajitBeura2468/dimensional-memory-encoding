@@ -3,6 +3,8 @@ import { EvidencePage } from "./pages/EvidencePage";
 import { HomePage } from "./pages/HomePage";
 import { LabPage } from "./pages/LabPage";
 import { PaperPage } from "./pages/PaperPage";
+import { HistoryPage } from "./pages/HistoryPage";
+import { NotFoundPage } from "./pages/NotFoundPage";
 import "./styles.css";
 
 export default function App() {
@@ -14,8 +16,12 @@ export default function App() {
       <EvidencePage />
     ) : path === "/paper" ? (
       <PaperPage />
-    ) : (
+    ) : path === "/history" ? (
+      <HistoryPage />
+    ) : path === "/" ? (
       <HomePage />
+    ) : (
+      <NotFoundPage />
     );
   return <SiteShell path={path}>{page}</SiteShell>;
 }

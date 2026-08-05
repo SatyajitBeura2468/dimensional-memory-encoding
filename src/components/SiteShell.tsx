@@ -15,6 +15,7 @@ export function SiteShell({
     ["/lab", "Lab"],
     ["/evidence", "Evidence"],
     ["/paper", "Paper"],
+    ["/history", "History"],
   ] as const;
   useEffect(() => {
     const titles: Record<string, string> = {
@@ -22,8 +23,14 @@ export function SiteShell({
       "/lab": "Interactive DME Laboratory | The Box That Remembers",
       "/evidence": "DME Evidence and Controls | The Box That Remembers",
       "/paper": "DME Version 3 Paper | The Box That Remembers",
+      "/history": "DME Version History | The Box That Remembers",
     };
-    document.title = titles[path] ?? titles["/"];
+    document.title = titles[path] ?? "Page Not Found | The Box That Remembers";
+    const robots = document.querySelector<HTMLMetaElement>(
+      'meta[name="robots"]',
+    );
+    if (robots)
+      robots.content = path in titles ? "index,follow" : "noindex,nofollow";
     window.scrollTo(0, 0);
     setOpen(false);
   }, [path]);
@@ -133,8 +140,71 @@ export function SiteShell({
         </nav>
       </header>
       <main id="main">{children}</main>
-      <footer>
-        <span>Dimensional Memory Encoding</span>
+      <footer className="site-footer">
+        <div className="footer-identity">
+          <strong>Dimensional Memory Encoding</strong>
+          <span>Version 3 · Satyajit Beura</span>
+        </div>
+        <nav className="footer-links" aria-label="Research links">
+          <a href="/paper">Paper</a>
+          <a
+            href="https://github.com/SatyajitBeura2468/dimensional-memory-encoding/releases/tag/v3.0.0"
+            rel="noreferrer"
+            target="_blank"
+          >
+            V3 release
+          </a>
+          <a
+            href="https://github.com/SatyajitBeura2468/dimensional-memory-encoding/releases/tag/v3.0.0"
+            rel="noreferrer"
+            target="_blank"
+          >
+            Replication package (release)
+          </a>
+          <a href="/history">Version history</a>
+          <a
+            href="https://orcid.org/0009-0006-4471-2845"
+            rel="noreferrer"
+            target="_blank"
+          >
+            ORCID
+          </a>
+          <a
+            href="https://doi.org/10.5281/zenodo.17943112"
+            rel="noreferrer"
+            target="_blank"
+          >
+            Exploratory DOI
+          </a>
+          <a
+            href="https://zenodo.org/records/17943112"
+            rel="noreferrer"
+            target="_blank"
+          >
+            Zenodo
+          </a>
+          <a
+            href="https://github.com/SatyajitBeura2468/dimensional-memory-encoding"
+            rel="noreferrer"
+            target="_blank"
+          >
+            GitHub
+          </a>
+          <a
+            href="https://github.com/SatyajitBeura2468/dimensional-memory-encoding/issues"
+            rel="noreferrer"
+            target="_blank"
+          >
+            Scientific issue
+          </a>
+          <a
+            href="https://opensource.org/license/mit"
+            rel="noreferrer"
+            target="_blank"
+          >
+            MIT licence
+          </a>
+        </nav>
         <span>© 2026 Satyajit Beura</span>
       </footer>
     </>
